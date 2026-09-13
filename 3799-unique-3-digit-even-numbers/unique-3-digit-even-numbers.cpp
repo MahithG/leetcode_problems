@@ -1,41 +1,32 @@
 class Solution {
 public:
     int totalNumbers(vector<int>& digits) {
+        vector<int> freq(10, 0);
 
-        map<int,int> mp;
-
-        for(int i = 0; i < digits.size(); i++){
-            mp[digits[i]]++;
-        }
+        for (int x : digits)
+            freq[x]++;
 
         int ans = 0;
 
-        for(auto i : mp){              // first digit
-            if(i.first == 0)
-                continue;
+        for (int i = 1; i <= 9; i++) {          // hundreds
+            for (int j = 0; j <= 9; j++) {      // tens
+                for (int k = 0; k <= 8; k += 2) { // units
+                    vector<int> used(10, 0);
 
-            for(auto j : mp){          // second digit
-                for(auto k : mp){      // third digit
+                    used[i]++;
+                    used[j]++;
+                    used[k]++;
 
-                    if(k.first % 2 != 0)
-                        continue;
+                    bool possible = true;
 
-                    map<int,int> temp;
-
-                    temp[i.first]++;
-                    temp[j.first]++;
-                    temp[k.first]++;
-
-                    bool flag = true;
-
-                    for(auto x : temp){
-                        if(x.second > mp[x.first]){
-                            flag = false;
+                    for (int d = 0; d <= 9; d++) {
+                        if (used[d] > freq[d]) {
+                            possible = false;
                             break;
                         }
                     }
 
-                    if(flag)
+                    if (possible)
                         ans++;
                 }
             }
